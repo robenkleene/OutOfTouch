@@ -16,7 +16,7 @@ public class OutOfTouch {
         createFile(atPath: path, handler: nil)
     }
 
-    public class func createFile(atPath path: String, handler: ((Void) -> Void)?) {
+    public class func createFile(atPath path: String, handler: (() -> Void)?) {
         let task = Process()
         task.launchPath = "/usr/bin/touch"
         task.arguments = [path]
@@ -29,7 +29,7 @@ public class OutOfTouch {
         removeFile(atPath: path, handler: nil)
     }
 
-    public class func removeFile(atPath path: String, handler: ((Void) -> Void)?) {
+    public class func removeFile(atPath path: String, handler: (() -> Void)?) {
         let pathAsNSString: NSString = path as NSString
         if pathAsNSString.range(of: "*").location != NSNotFound {
             assert(false, "The path should not contain a wildcard")
@@ -47,7 +47,7 @@ public class OutOfTouch {
         createDirectory(atPath: path, handler: nil)
     }
 
-    public class func createDirectory(atPath path: String, handler: ((Void) -> Void)?) {
+    public class func createDirectory(atPath path: String, handler: (() -> Void)?) {
         let task = Process()
         task.launchPath = "/bin/mkdir"
         task.arguments = [path]
@@ -60,7 +60,7 @@ public class OutOfTouch {
         removeDirectory(atPath: path, handler: nil)
     }
 
-    public class func removeDirectory(atPath path: String, handler: ((Void) -> Void)?) {
+    public class func removeDirectory(atPath path: String, handler: (() -> Void)?) {
         let pathAsNSString: NSString = path as NSString
         if pathAsNSString.range(of: "*").location != NSNotFound {
             assert(false, "The path should not contain a wildcard")
@@ -82,7 +82,7 @@ public class OutOfTouch {
         copyDirectory(atPath: path, toPath: destinationPath, handler: nil)
     }
 
-    public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: ((Void) -> Void)?) {
+    public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
         let pathAsNSString: NSString = path as NSString
         if pathAsNSString.range(of: "*").location != NSNotFound {
             assert(false, "The path should not contain a wildcard")
@@ -122,7 +122,7 @@ public class OutOfTouch {
         moveItem(atPath: path, toPath: destinationPath, handler: nil)
     }
 
-    public class func moveItem(atPath path: String, toPath destinationPath: String, handler: ((Void) -> Void)?) {
+    public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
         let task = Process()
         task.launchPath = "/bin/mv"
         task.arguments = [path, destinationPath]
@@ -150,7 +150,7 @@ public class OutOfTouch {
 
     // MARK: Private
 
-    private class func run(_ task: Process, handler: ((Void) -> Void)?) {
+    private class func run(_ task: Process, handler: (() -> Void)?) {
         task.standardOutput = Pipe()
         (task.standardOutput! as AnyObject).fileHandleForReading.readabilityHandler = { (file: FileHandle!) -> Void in
             let data = file.availableData
