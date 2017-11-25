@@ -7,8 +7,9 @@
 //
 
 import XCTest
+import XCTestTemp
 
-class OutOfTouchTests: XCTestCase {
+class OutOfTouchTests: TemporaryDirectoryTestCase {
     
     override func setUp() {
         super.setUp()

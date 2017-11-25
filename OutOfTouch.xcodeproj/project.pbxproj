@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		45BA39D11FCA260D00A20D84 /* OutOfTouchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA39D01FCA260D00A20D84 /* OutOfTouchTests.swift */; };
 		45BA39D31FCA260D00A20D84 /* OutOfTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45EC4D871ED24E3100EE0204 /* OutOfTouch.framework */; };
+		45BA39DB1FCA2AEC00A20D84 /* XCTestTemp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BA39DA1FCA2AEC00A20D84 /* XCTestTemp.framework */; };
+		45BA39DD1FCA2B1B00A20D84 /* XCTestTemp.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45BA39DA1FCA2AEC00A20D84 /* XCTestTemp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45EC4D8C1ED24E3100EE0204 /* OutOfTouch.h in Headers */ = {isa = PBXBuildFile; fileRef = 45EC4D8A1ED24E3100EE0204 /* OutOfTouch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		45EC4D931ED252C900EE0204 /* OutOfTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EC4D921ED252C800EE0204 /* OutOfTouch.swift */; };
 /* End PBXBuildFile section */
@@ -23,10 +25,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		45BA39DC1FCA2B0F00A20D84 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				45BA39DD1FCA2B1B00A20D84 /* XCTestTemp.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		45BA39CE1FCA260D00A20D84 /* OutOfTouchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OutOfTouchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45BA39D01FCA260D00A20D84 /* OutOfTouchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutOfTouchTests.swift; sourceTree = "<group>"; };
 		45BA39D21FCA260D00A20D84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		45BA39DA1FCA2AEC00A20D84 /* XCTestTemp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTestTemp.framework; path = Carthage/Build/Mac/XCTestTemp.framework; sourceTree = "<group>"; };
 		45EC4D871ED24E3100EE0204 /* OutOfTouch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OutOfTouch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		45EC4D8A1ED24E3100EE0204 /* OutOfTouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutOfTouch.h; sourceTree = "<group>"; };
 		45EC4D8B1ED24E3100EE0204 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -39,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45BA39D31FCA260D00A20D84 /* OutOfTouch.framework in Frameworks */,
+				45BA39DB1FCA2AEC00A20D84 /* XCTestTemp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,12 +78,21 @@
 			path = OutOfTouchTests;
 			sourceTree = "<group>";
 		};
+		45BA39D91FCA2AEC00A20D84 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45BA39DA1FCA2AEC00A20D84 /* XCTestTemp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		45EC4D7D1ED24E3100EE0204 = {
 			isa = PBXGroup;
 			children = (
 				45EC4D891ED24E3100EE0204 /* OutOfTouch */,
 				45BA39CF1FCA260D00A20D84 /* OutOfTouchTests */,
 				45EC4D881ED24E3100EE0204 /* Products */,
+				45BA39D91FCA2AEC00A20D84 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,6 +136,7 @@
 				45BA39CA1FCA260D00A20D84 /* Sources */,
 				45BA39CB1FCA260D00A20D84 /* Frameworks */,
 				45BA39CC1FCA260D00A20D84 /* Resources */,
+				45BA39DC1FCA2B0F00A20D84 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -230,6 +257,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OutOfTouchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -247,6 +278,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OutOfTouchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
