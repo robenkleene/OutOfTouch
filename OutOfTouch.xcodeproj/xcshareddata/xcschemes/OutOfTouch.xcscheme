@@ -29,7 +29,26 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "45BA39CD1FCA260D00A20D84"
+               BuildableName = "OutOfTouchTests.xctest"
+               BlueprintName = "OutOfTouchTests"
+               ReferencedContainer = "container:OutOfTouch.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "45EC4D861ED24E3100EE0204"
+            BuildableName = "OutOfTouch.framework"
+            BlueprintName = "OutOfTouch"
+            ReferencedContainer = "container:OutOfTouch.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
