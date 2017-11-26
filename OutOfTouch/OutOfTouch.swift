@@ -113,27 +113,38 @@ public class OutOfTouch {
     }
 
     private class func run(_ task: Process, handler: (() -> Void)?) {
-        task.standardOutput = Pipe()
-        (task.standardOutput! as AnyObject).fileHandleForReading.readabilityHandler = { (file: FileHandle!) -> Void in
+
+        let standardOutputPipe = Pipe()
+        standardOutputPipe.fileHandleForReading.readabilityHandler = { file in
             let data = file.availableData
-            if let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+            if
+                let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue),
+                output.length > 0
+            {
                 print("standardOutput \(output)")
             }
         }
-        
-        task.standardError = Pipe()
-        (task.standardError! as AnyObject).fileHandleForReading.readabilityHandler = { (file: FileHandle!) -> Void in
-            let data = file.availableData
-            if let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+        task.standardOutput = standardOutputPipe
+
+        let standardErrorPipe = Pipe()
+        standardErrorPipe.fileHandleForReading.readabilityHandler = { file in
+            if
+                let output = NSString(data: file.availableData, encoding: String.Encoding.utf8.rawValue),
+                output.length > 0
+            {
                 print("standardError \(output)")
                 assert(false, "There should not be output to standard error")
             }
         }
-        
-        task.terminationHandler = { (task: Process) -> Void in
+        task.standardError = standardErrorPipe
+
+        task.terminationHandler = { task in
             handler?()
-            (task.standardOutput! as AnyObject).fileHandleForReading.readabilityHandler = nil
-            (task.standardError! as AnyObject).fileHandleForReading.readabilityHandler = nil
+            assert(task.terminationStatus == 0)
+            assert(task.standardOutput as! Pipe == standardOutputPipe)
+            assert(task.standardError as! Pipe == standardErrorPipe)
+            standardOutputPipe.fileHandleForReading.readabilityHandler = nil
+            standardErrorPipe.fileHandleForReading.readabilityHandler = nil
         }
         
         task.launch()
