@@ -55,10 +55,31 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testDirectory() {
-        // create directory
-        // confirm directory  exists
-        // remove directory
-        // confirm directory no longer exists
+        let path = temporaryDirectoryPath.appendingPathComponent(testDirectoryName)
+
+        // Create a directory
+        let createExpectation = expectation(description: "Create directory")
+        OutOfTouch.createDirectory(atPath: path) {
+            createExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it exists
+        var isDir: ObjCBool = false
+        var exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(isDir.boolValue)
+
+        // Remove the directory
+        let removeExpectation = expectation(description: "Remove file")
+        OutOfTouch.removeDirectory(atPath: path) {
+            removeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it's removed
+        exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(!exists)
     }
 
     func testContentsNewFile() {
