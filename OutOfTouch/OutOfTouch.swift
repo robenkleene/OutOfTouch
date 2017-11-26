@@ -13,6 +13,7 @@ public class OutOfTouch {
     // MARK: Create File
 
     public class func createFile(atPath path: String, handler: (() -> Void)?) {
+        confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/usr/bin/touch"
         task.arguments = [path]
@@ -22,11 +23,7 @@ public class OutOfTouch {
     // MARK: Remove File
 
     public class func removeFile(atPath path: String, handler: (() -> Void)?) {
-        let pathAsNSString: NSString = path as NSString
-        if pathAsNSString.range(of: "*").location != NSNotFound {
-            assert(false, "The path should not contain a wildcard")
-            return
-        }
+        confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/bin/rm"
         task.arguments = [path]
@@ -36,6 +33,7 @@ public class OutOfTouch {
     // MARK: Create Directory
 
     public class func createDirectory(atPath path: String, handler: (() -> Void)?) {
+        confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/bin/mkdir"
         task.arguments = [path]
@@ -45,15 +43,7 @@ public class OutOfTouch {
     // MARK: Remove Directory
 
     public class func removeDirectory(atPath path: String, handler: (() -> Void)?) {
-        let pathAsNSString: NSString = path as NSString
-        if pathAsNSString.range(of: "*").location != NSNotFound {
-            assert(false, "The path should not contain a wildcard")
-            return
-        }
-        if !path.hasPrefix("/var/folders/") {
-            assert(false, "The path should be a temporary directory")
-            return
-        }
+        confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/bin/rm"
         task.arguments = ["-r", path]
@@ -63,24 +53,8 @@ public class OutOfTouch {
     // MARK: Copy Directory
 
     public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
-        let pathAsNSString: NSString = path as NSString
-        if pathAsNSString.range(of: "*").location != NSNotFound {
-            assert(false, "The path should not contain a wildcard")
-            return
-        }
-        let destinationPathAsNSString: NSString = destinationPath as NSString
-        if destinationPathAsNSString.range(of: "*").location != NSNotFound {
-            assert(false, "The destination path should not contain a wildcard")
-            return
-        }
-        if !path.hasPrefix("/var/folders/") {
-            assert(false, "The path should be a temporary directory")
-            return
-        }
-        if !destinationPath.hasPrefix("/var/folders/") {
-            assert(false, "The destination path should be a temporary directory")
-            return
-        }
+        confirmSafe(path: path)
+        confirmSafe(path: destinationPath)
         if path.hasSuffix("/") {
             assert(false, "The path should not end with a slash")
             return
@@ -89,7 +63,6 @@ public class OutOfTouch {
             assert(false, "The path should not end with a slash")
             return
         }
-        
         let task = Process()
         task.launchPath = "/bin/cp"
         task.arguments = ["-R", path, destinationPath]
@@ -99,6 +72,8 @@ public class OutOfTouch {
     // MARK: Move Item
 
     public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
+        confirmSafe(path: path)
+        confirmSafe(path: destinationPath)
         let task = Process()
         task.launchPath = "/bin/mv"
         task.arguments = [path, destinationPath]
@@ -108,6 +83,7 @@ public class OutOfTouch {
     // MARK: Write to File
 
     public class func writeToFile(atPath path: String, contents: String) {
+        confirmSafe(path: path)
         let echoTask = Process()
         echoTask.launchPath = "/bin/echo"
         echoTask.arguments = [contents]
@@ -125,6 +101,16 @@ public class OutOfTouch {
     }
 
     // MARK: Private
+
+    private class func confirmSafe(path: String) {
+        let pathAsNSString: NSString = path as NSString
+        if pathAsNSString.range(of: "*").location != NSNotFound {
+            assert(false, "The path should not contain a wildcard")
+        }
+        if !path.hasPrefix("/var/folders/") {
+            assert(false, "The path should be a temporary directory")
+        }
+    }
 
     private class func run(_ task: Process, handler: (() -> Void)?) {
         task.standardOutput = Pipe()
