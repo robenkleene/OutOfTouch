@@ -8,29 +8,84 @@
 
 import XCTest
 import XCTestTemp
+import StringPlusPath
+import OutOfTouch
 
 class OutOfTouchTests: TemporaryDirectoryTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+
+    let defaultTimeout = 20.0
+    let testFilename = "Test File"
+    let testDirectoryName = "Test Directory"
+    let testContents = "Test Contents"
+
+    // public class func createFile(atPath path: String, handler: (() -> Void)?) {
+    // public class func removeFile(atPath path: String, handler: (() -> Void)?) {
+    // public class func createDirectory(atPath path: String, handler: (() -> Void)?) {
+    // public class func removeDirectory(atPath path: String, handler: (() -> Void)?) {
+    // public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
+    // public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
+    // public class func writeToFile(atPath path: String, contents: String) {
+
+    func testDirectory() {
+        let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
+
+        // Create a file
+        let createExpectation = expectation(description: "Create file")
+        OutOfTouch.createFile(atPath: path) {
+            createExpectation.fulfill()
         }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it exists
+        var isDir: ObjCBool = false
+        var exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(!isDir.boolValue)
+
+        // Remove the file
+        let removeExpectation = expectation(description: "Remove file")
+        OutOfTouch.removeFile(atPath: path) {
+            removeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it's removed
+        exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(!exists)
     }
-    
+
+    func testFile() {
+        // create file in directory
+        // confirm file exists
+        // remove file
+        // confirm file no longer exists
+    }
+
+    func testContentsNewFile() {
+        // write contents
+        // confirm file exists
+        // confirm file contents
+        // remove file
+        // confirm file is removed
+    }
+
+    func testContentsExistingFile() {
+        // create file
+        // confirm file exists
+        // write contents
+        // confirm file contents
+        // remove file
+        // confirm file is removed
+    }
+
+    func testMove() {
+
+    }
+
+    func testCopy() {
+
+    }
+
+    // Write to a file that doesn't exist
+
 }

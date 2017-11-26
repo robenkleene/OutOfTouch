@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4520773D1FCB7C5400CE4DAE /* StringPlusPath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4520773C1FCB7C5300CE4DAE /* StringPlusPath.framework */; };
+		4520773E1FCB7C5B00CE4DAE /* StringPlusPath.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4520773C1FCB7C5300CE4DAE /* StringPlusPath.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		45BA39D11FCA260D00A20D84 /* OutOfTouchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA39D01FCA260D00A20D84 /* OutOfTouchTests.swift */; };
 		45BA39D31FCA260D00A20D84 /* OutOfTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45EC4D871ED24E3100EE0204 /* OutOfTouch.framework */; };
 		45BA39DB1FCA2AEC00A20D84 /* XCTestTemp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BA39DA1FCA2AEC00A20D84 /* XCTestTemp.framework */; };
@@ -32,6 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4520773E1FCB7C5B00CE4DAE /* StringPlusPath.framework in CopyFiles */,
 				45BA39DD1FCA2B1B00A20D84 /* XCTestTemp.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4520773C1FCB7C5300CE4DAE /* StringPlusPath.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StringPlusPath.framework; path = Carthage/Build/Mac/StringPlusPath.framework; sourceTree = "<group>"; };
 		45BA39CE1FCA260D00A20D84 /* OutOfTouchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OutOfTouchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45BA39D01FCA260D00A20D84 /* OutOfTouchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutOfTouchTests.swift; sourceTree = "<group>"; };
 		45BA39D21FCA260D00A20D84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +60,7 @@
 			files = (
 				45BA39D31FCA260D00A20D84 /* OutOfTouch.framework in Frameworks */,
 				45BA39DB1FCA2AEC00A20D84 /* XCTestTemp.framework in Frameworks */,
+				4520773D1FCB7C5400CE4DAE /* StringPlusPath.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +86,7 @@
 		45BA39D91FCA2AEC00A20D84 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4520773C1FCB7C5300CE4DAE /* StringPlusPath.framework */,
 				45BA39DA1FCA2AEC00A20D84 /* XCTestTemp.framework */,
 			);
 			name = Frameworks;
