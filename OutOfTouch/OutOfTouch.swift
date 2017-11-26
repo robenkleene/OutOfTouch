@@ -12,10 +12,6 @@ public class OutOfTouch {
 
     // MARK: Create File
 
-    public class func createFile(atPath path: String) {
-        createFile(atPath: path, handler: nil)
-    }
-
     public class func createFile(atPath path: String, handler: (() -> Void)?) {
         let task = Process()
         task.launchPath = "/usr/bin/touch"
@@ -24,10 +20,6 @@ public class OutOfTouch {
     }
 
     // MARK: Remove File
-
-    public class func removeFile(atPath path: String) {
-        removeFile(atPath: path, handler: nil)
-    }
 
     public class func removeFile(atPath path: String, handler: (() -> Void)?) {
         let pathAsNSString: NSString = path as NSString
@@ -43,10 +35,6 @@ public class OutOfTouch {
 
     // MARK: Create Directory
 
-    public class func createDirectory(atPath path: String) {
-        createDirectory(atPath: path, handler: nil)
-    }
-
     public class func createDirectory(atPath path: String, handler: (() -> Void)?) {
         let task = Process()
         task.launchPath = "/bin/mkdir"
@@ -55,10 +43,6 @@ public class OutOfTouch {
     }
 
     // MARK: Remove Directory
-
-    public class func removeDirectory(atPath path: String) {
-        removeDirectory(atPath: path, handler: nil)
-    }
 
     public class func removeDirectory(atPath path: String, handler: (() -> Void)?) {
         let pathAsNSString: NSString = path as NSString
@@ -77,10 +61,6 @@ public class OutOfTouch {
     }
 
     // MARK: Copy Directory
-
-    public class func copyDirectory(atPath path: String, toPath destinationPath: String) {
-        copyDirectory(atPath: path, toPath: destinationPath, handler: nil)
-    }
 
     public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
         let pathAsNSString: NSString = path as NSString
@@ -117,10 +97,6 @@ public class OutOfTouch {
     }
     
     // MARK: Move Item
-
-    public class func moveItem(atPath path: String, toPath destinationPath: String) {
-        moveItem(atPath: path, toPath: destinationPath, handler: nil)
-    }
 
     public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
         let task = Process()
