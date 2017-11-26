@@ -107,6 +107,4 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
     }
 
-    // Write to a file that doesn't exist
-
 }
