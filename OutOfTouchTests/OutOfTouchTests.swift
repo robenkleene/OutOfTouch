@@ -26,7 +26,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     // public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
     // public class func writeToFile(atPath path: String, contents: String) {
 
-    func testDirectory() {
+    func testFile() {
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
 
         // Create a file
@@ -54,11 +54,11 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         XCTAssertTrue(!exists)
     }
 
-    func testFile() {
-        // create file in directory
-        // confirm file exists
-        // remove file
-        // confirm file no longer exists
+    func testDirectory() {
+        // create directory
+        // confirm directory  exists
+        // remove directory
+        // confirm directory no longer exists
     }
 
     func testContentsNewFile() {
