@@ -78,7 +78,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
 
         // Write to file
-        let writeExpectation = expectation(description: "Remove file")
+        let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path, contents: testContents) {
             writeExpectation.fulfill()
         }
@@ -127,7 +127,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         XCTAssertTrue(!isDir.boolValue)
 
         // Write to the file
-        let writeExpectation = expectation(description: "Remove file")
+        let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path, contents: testContents) {
             writeExpectation.fulfill()
         }
@@ -153,11 +153,15 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testMove() {
-
+        // Write to a file in a directory
+        // Move and confirm that it exists in the new location
+        // Delete it
     }
 
     func testCopy() {
-
+        // Write to a file in a directory
+        // Copy and confirm that it exists in the new location
+        // Delete it from both locations
     }
 
 }
