@@ -77,7 +77,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     func testContentsNewFile() {
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
 
-        // Remove the directory
+        // Write to file
         let writeExpectation = expectation(description: "Remove file")
         OutOfTouch.writeToFile(atPath: path, contents: testContents) {
             writeExpectation.fulfill()
@@ -89,6 +89,12 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         var exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
         XCTAssertTrue(exists)
         XCTAssertTrue(!isDir.boolValue)
+
+
+        // Read the contents
+        let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
+        let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
+        XCTAssertEqual(contents, testContents)
 
         // Clean Up
 
@@ -105,12 +111,45 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testContentsExistingFile() {
-        // create file
-        // confirm file exists
-        // write contents
-        // confirm file contents
-        // remove file
-        // confirm file is removed
+        let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
+
+        // Create a file
+        let createExpectation = expectation(description: "Create file")
+        OutOfTouch.createFile(atPath: path) {
+            createExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it exists
+        var isDir: ObjCBool = false
+        var exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(!isDir.boolValue)
+
+        // Write to the file
+        let writeExpectation = expectation(description: "Remove file")
+        OutOfTouch.writeToFile(atPath: path, contents: testContents) {
+            writeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Read the contents
+        let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
+        let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
+        XCTAssertEqual(contents, testContents)
+
+        // Clean Up
+
+        // Remove the file
+        let removeExpectation = expectation(description: "Remove file")
+        OutOfTouch.removeFile(atPath: path) {
+            removeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it's removed
+        exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(!exists)
     }
 
     func testMove() {
