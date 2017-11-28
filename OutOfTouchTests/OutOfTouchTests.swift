@@ -18,14 +18,6 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     let testDirectoryName = "Test Directory"
     let testContents = "Test Contents"
 
-    // public class func createFile(atPath path: String, handler: (() -> Void)?) {
-    // public class func removeFile(atPath path: String, handler: (() -> Void)?) {
-    // public class func createDirectory(atPath path: String, handler: (() -> Void)?) {
-    // public class func removeDirectory(atPath path: String, handler: (() -> Void)?) {
-    // public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
-    // public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
-    // public class func writeToFile(atPath path: String, contents: String) {
-
     func testFile() {
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
 
@@ -83,11 +75,33 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testContentsNewFile() {
-        // write contents
-        // confirm file exists
-        // confirm file contents
-        // remove file
-        // confirm file is removed
+        let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
+
+        // Remove the directory
+        let writeExpectation = expectation(description: "Remove file")
+        OutOfTouch.writeToFile(atPath: path, contents: testContents) {
+            writeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it exists
+        var isDir: ObjCBool = false
+        var exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(!isDir.boolValue)
+
+        // Clean Up
+
+        // Remove the file
+        let removeExpectation = expectation(description: "Remove file")
+        OutOfTouch.removeFile(atPath: path) {
+            removeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it's removed
+        exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+        XCTAssertTrue(!exists)
     }
 
     func testContentsExistingFile() {

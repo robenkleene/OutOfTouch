@@ -52,7 +52,10 @@ public class OutOfTouch {
 
     // MARK: Copy Directory
 
-    public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
+    public class func copyDirectory(atPath path: String,
+                                    toPath destinationPath: String,
+                                    handler: (() -> Void)?)
+    {
         confirmSafe(path: path)
         confirmSafe(path: destinationPath)
         if path.hasSuffix("/") {
@@ -71,7 +74,10 @@ public class OutOfTouch {
     
     // MARK: Move Item
 
-    public class func moveItem(atPath path: String, toPath destinationPath: String, handler: (() -> Void)?) {
+    public class func moveItem(atPath path: String,
+                               toPath destinationPath: String,
+                               handler: (() -> Void)?)
+    {
         confirmSafe(path: path)
         confirmSafe(path: destinationPath)
         let task = Process()
@@ -82,7 +88,10 @@ public class OutOfTouch {
 
     // MARK: Write to File
 
-    public class func writeToFile(atPath path: String, contents: String) {
+    public class func writeToFile(atPath path: String,
+                                  contents: String,
+                                  handler: (() -> Void)?)
+    {
         confirmSafe(path: path)
         let echoTask = Process()
         echoTask.launchPath = "/bin/echo"
@@ -94,9 +103,9 @@ public class OutOfTouch {
         teeTask.launchPath = "/usr/bin/tee"
         teeTask.arguments = [path]
         teeTask.standardInput = pipe
-        teeTask.standardOutput = Pipe() // Suppress stdout
+        teeTask.standardOutput = Pipe() // Suppress `STDOUT`
 
-        teeTask.launch()
+        run(teeTask, handler: handler)
         echoTask.launch()
     }
 
