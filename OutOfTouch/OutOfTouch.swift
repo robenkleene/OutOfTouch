@@ -10,9 +10,11 @@ import Cocoa
 
 public class OutOfTouch {
 
+    public typealias OutOfTouchHandler = (() -> Void)
+
     // MARK: Create File
 
-    public class func createFile(atPath path: String, handler: (() -> Void)?) {
+    public class func createFile(atPath path: String, handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/usr/bin/touch"
@@ -22,7 +24,7 @@ public class OutOfTouch {
 
     // MARK: Remove File
 
-    public class func removeFile(atPath path: String, handler: (() -> Void)?) {
+    public class func removeFile(atPath path: String, handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/bin/rm"
@@ -32,7 +34,7 @@ public class OutOfTouch {
 
     // MARK: Create Directory
 
-    public class func createDirectory(atPath path: String, handler: (() -> Void)?) {
+    public class func createDirectory(atPath path: String, handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/bin/mkdir"
@@ -42,7 +44,7 @@ public class OutOfTouch {
 
     // MARK: Remove Directory
 
-    public class func removeDirectory(atPath path: String, handler: (() -> Void)?) {
+    public class func removeDirectory(atPath path: String, handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         let task = Process()
         task.launchPath = "/bin/rm"
@@ -54,7 +56,7 @@ public class OutOfTouch {
 
     public class func copyDirectory(atPath path: String,
                                     toPath destinationPath: String,
-                                    handler: (() -> Void)?)
+                                    handler: OutOfTouchHandler?)
     {
         confirmSafe(path: path)
         confirmSafe(path: destinationPath)
@@ -76,7 +78,7 @@ public class OutOfTouch {
 
     public class func moveItem(atPath path: String,
                                toPath destinationPath: String,
-                               handler: (() -> Void)?)
+                               handler: OutOfTouchHandler?)
     {
         confirmSafe(path: path)
         confirmSafe(path: destinationPath)
@@ -90,7 +92,7 @@ public class OutOfTouch {
 
     public class func writeToFile(atPath path: String,
                                   contents: String,
-                                  handler: (() -> Void)?)
+                                  handler: OutOfTouchHandler?)
     {
         confirmSafe(path: path)
         let echoTask = Process()
@@ -121,7 +123,7 @@ public class OutOfTouch {
         }
     }
 
-    private class func run(_ task: Process, handler: (() -> Void)?) {
+    private class func run(_ task: Process, handler: OutOfTouchHandler?) {
 
         let standardOutputPipe = Pipe()
         standardOutputPipe.fileHandleForReading.readabilityHandler = { file in
