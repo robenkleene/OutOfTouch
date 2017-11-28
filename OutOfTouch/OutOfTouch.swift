@@ -8,9 +8,19 @@
 
 import Cocoa
 
+public enum OutOfTouchError: Error, CustomStringConvertible {
+    case ProcessError(standardError: String, standardOutput: String)
+    public var description: String {
+        switch self {
+        case .ProcessError(let standardError, let standardOutput):
+            return "standardError: \(standardError)\nstandardOutput: \(standardOutput)"
+        }
+    }
+}
+
 public class OutOfTouch {
 
-    public typealias OutOfTouchHandler = (() -> Void)
+    public typealias OutOfTouchHandler = ((OutOfTouchError?) -> Void)
 
     // MARK: Create File
 
@@ -150,7 +160,7 @@ public class OutOfTouch {
         task.standardError = standardErrorPipe
 
         task.terminationHandler = { task in
-            handler?()
+            handler?(nil)
             assert(task.terminationStatus == 0)
             assert(task.standardOutput as! Pipe == standardOutputPipe)
             assert(task.standardError as! Pipe == standardErrorPipe)
