@@ -8,19 +8,9 @@
 
 import Cocoa
 
-public enum OutOfTouchError: Error, CustomStringConvertible {
-    case ProcessError(standardError: String, standardOutput: String)
-    public var description: String {
-        switch self {
-        case .ProcessError(let standardError, let standardOutput):
-            return "standardError: \(standardError)\nstandardOutput: \(standardOutput)"
-        }
-    }
-}
-
 public class OutOfTouch {
 
-    public typealias OutOfTouchHandler = ((OutOfTouchError?) -> Void)
+    public typealias OutOfTouchHandler = (String?, String?, Int32) -> Void
 
     // MARK: Create File
 
@@ -115,7 +105,6 @@ public class OutOfTouch {
         teeTask.launchPath = "/usr/bin/tee"
         teeTask.arguments = [path]
         teeTask.standardInput = pipe
-        teeTask.standardOutput = Pipe() // Suppress `STDOUT`
 
         run(teeTask, handler: handler)
         echoTask.launch()
@@ -134,38 +123,51 @@ public class OutOfTouch {
     }
 
     private class func run(_ task: Process, handler: OutOfTouchHandler?) {
-
+        let queue = DispatchQueue(label: "OutOfTouchHandlerQueue")
+        var standardOutput: String?
+        var standardError: String?
         let standardOutputPipe = Pipe()
         standardOutputPipe.fileHandleForReading.readabilityHandler = { file in
-            let data = file.availableData
-            if
-                let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue),
-                output.length > 0
-            {
-                print("standardOutput \(output)")
+            queue.async {
+                let data = file.availableData
+                if
+                    let output = String(data: data,
+                                        encoding: String.Encoding.utf8),
+                    output.count > 0
+                {
+                    if standardOutput == nil {
+                        standardOutput = ""
+                    }
+                    standardOutput? += output
+                }
             }
         }
         task.standardOutput = standardOutputPipe
 
         let standardErrorPipe = Pipe()
         standardErrorPipe.fileHandleForReading.readabilityHandler = { file in
-            if
-                let output = NSString(data: file.availableData, encoding: String.Encoding.utf8.rawValue),
-                output.length > 0
-            {
-                print("standardError \(output)")
-                assert(false, "There should not be output to standard error")
+            queue.async {
+                if
+                    let output = String(data: file.availableData,
+                                        encoding: String.Encoding.utf8),
+                    output.count > 0
+                {
+                    if standardError == nil {
+                        standardError = ""
+                    }
+                    standardError? += output
+                }
             }
+
         }
         task.standardError = standardErrorPipe
 
         task.terminationHandler = { task in
-            handler?(nil)
-            assert(task.terminationStatus == 0)
-            assert(task.standardOutput as! Pipe == standardOutputPipe)
-            assert(task.standardError as! Pipe == standardErrorPipe)
-            standardOutputPipe.fileHandleForReading.readabilityHandler = nil
-            standardErrorPipe.fileHandleForReading.readabilityHandler = nil
+            queue.async {
+                handler?(standardOutput, standardError, task.terminationStatus)
+                standardOutputPipe.fileHandleForReading.readabilityHandler = nil
+                standardErrorPipe.fileHandleForReading.readabilityHandler = nil
+            }
         }
         
         task.launch()

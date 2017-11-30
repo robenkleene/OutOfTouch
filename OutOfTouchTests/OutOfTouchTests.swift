@@ -23,8 +23,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Create a file
         let createExpectation = expectation(description: "Create file")
-        OutOfTouch.createFile(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.createFile(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             createExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -37,8 +39,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Remove the file
         let removeExpectation = expectation(description: "Remove file")
-        OutOfTouch.removeFile(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.removeFile(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             removeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -53,8 +57,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Create a directory
         let createExpectation = expectation(description: "Create directory")
-        OutOfTouch.createDirectory(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.createDirectory(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             createExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -67,8 +73,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Remove the directory
         let removeExpectation = expectation(description: "Remove file")
-        OutOfTouch.removeDirectory(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.removeDirectory(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             removeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -85,8 +93,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
                                contents: testContents)
-        { error in
-            XCTAssertNil(error)
+        { standardOutput, standardError, exitStatus in
+            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             writeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -106,8 +116,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Remove the file
         let removeExpectation = expectation(description: "Remove file")
-        OutOfTouch.removeFile(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.removeFile(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             removeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -122,8 +134,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Create a file
         let createExpectation = expectation(description: "Create file")
-        OutOfTouch.createFile(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.createFile(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             createExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -138,8 +152,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
                                contents: testContents)
-        { error in
-            XCTAssertNil(error)
+        { standardOutput, standardError, exitStatus in
+            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             writeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
@@ -153,8 +169,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Remove the file
         let removeExpectation = expectation(description: "Remove file")
-        OutOfTouch.removeFile(atPath: path) { error in
-            XCTAssertNil(error)
+        OutOfTouch.removeFile(atPath: path) { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
             removeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
