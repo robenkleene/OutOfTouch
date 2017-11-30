@@ -182,21 +182,24 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         XCTAssertTrue(!exists)
     }
 
-//    func testError() {
-//        let path = temporaryDirectoryPath
-//            .appendingPathComponent(testDirectoryName)
-//            .appendingPathComponent(testFilename)
-//
-//        // Write to file
-//        let writeExpectation = expectation(description: "Write to file")
-//        OutOfTouch.writeToFile(atPath: path, contents: testContents) {
-//            writeExpectation.fulfill()
-//        }
-//        waitForExpectations(timeout: defaultTimeout, handler: nil)
-//
-//    }
-//
-//
+    func testError() {
+        // `writeToFile` cannot write a new file to a directory that doesn't
+        // exist yet, so this will generate an error.
+        let path = temporaryDirectoryPath
+            .appendingPathComponent(testDirectoryName)
+            .appendingPathComponent(testFilename)
+
+        // Write to file
+        let writeExpectation = expectation(description: "Write to file")
+        OutOfTouch.writeToFile(atPath: path, contents: testContents) { standardOutput, standardError, exitStatus in
+            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+            XCTAssertNotNil(standardError)
+            XCTAssertTrue(exitStatus > 0)
+            writeExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+    }
+
 //    func testMove() {
 //        let path = temporaryDirectoryPath
 //            .appendingPathComponent(testDirectoryName)
