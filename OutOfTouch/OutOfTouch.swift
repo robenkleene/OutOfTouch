@@ -62,10 +62,12 @@ public class OutOfTouch {
         confirmSafe(path: destinationPath)
         if path.hasSuffix("/") {
             assert(false, "The path should not end with a slash")
+            handler?(nil, nil, 1)
             return
         }
         if destinationPath.hasSuffix("/") {
             assert(false, "The path should not end with a slash")
+            handler?(nil, nil, 1)
             return
         }
         let task = Process()
