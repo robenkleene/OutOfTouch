@@ -6,16 +6,15 @@ The macOS [File System Events API](https://developer.apple.com/library/content/d
 
 `OutOfTouch` provides helper methods for creating file system events from a separate process.
 
-	public class func createFile(atPath path: String) {
-	public class func createFile(atPath path: String, handler: ((Void) -> Void)?) {
-	public class func removeFile(atPath path: String) {
-	public class func removeFile(atPath path: String, handler: ((Void) -> Void)?) {
-	public class func createDirectory(atPath path: String) {
-	public class func createDirectory(atPath path: String, handler: ((Void) -> Void)?) {
-	public class func removeDirectory(atPath path: String) {
-	public class func removeDirectory(atPath path: String, handler: ((Void) -> Void)?) {
-	public class func copyDirectory(atPath path: String, toPath destinationPath: String) {
-	public class func copyDirectory(atPath path: String, toPath destinationPath: String, handler: ((Void) -> Void)?) {
-	public class func moveItem(atPath path: String, toPath destinationPath: String) {
-	public class func moveItem(atPath path: String, toPath destinationPath: String, handler: ((Void) -> Void)?) {
-	public class func writeToFile(atPath path: String, contents: String) {
+    public class func createFile(atPath path: String, handler: OutOfTouchHandler?) {
+    public class func removeFile(atPath path: String, handler: OutOfTouchHandler?) {
+    public class func createDirectory(atPath path: String, handler: OutOfTouchHandler?) {
+    public class func removeDirectory(atPath path: String, handler: OutOfTouchHandler?) {
+    public class func copyDirectory(atPath path: String,
+    public class func moveItem(atPath path: String,
+    public class func writeToFile(atPath path: String,
+
+Most take an `OutOfTouchHandler` for `stdout`, `stderr` and exit status:
+
+    public typealias OutOfTouchHandler = (String?, String?, Int32) -> Void
+
