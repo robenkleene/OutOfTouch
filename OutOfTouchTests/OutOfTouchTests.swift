@@ -262,9 +262,57 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testCopy() {
-        // Write to a file in a directory
-        // Copy and confirm that it exists in the new location
-        // Delete it from both locations
+        // # Setup
+
+        // Create a directory
+        let directoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryName)
+        try! FileManager.default.createDirectory(atPath: directoryPath,
+                                                 withIntermediateDirectories: true,
+                                                 attributes: nil)
+        let filePath = directoryPath.appendingPathComponent(testFilename)
+
+        // Create a file
+        try! testContents.write(toFile: filePath,
+                                atomically: true,
+                                encoding: String.Encoding.utf8)
+
+        // Confirm it exists
+        var isDir: ObjCBool = false
+        var exists = FileManager.default.fileExists(atPath: filePath, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(!isDir.boolValue)
+
+        // # Test
+
+        // Move the directory
+        let destinationDirectoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryNameTwo)
+        let destinationFilePath = destinationDirectoryPath.appendingPathComponent(testFilename)
+        let moveExpectation = expectation(description: "Move")
+        OutOfTouch.copyDirectory(atPath: directoryPath,
+                                 toPath: destinationDirectoryPath)
+        { standardOutput, standardError, exitStatus in
+            XCTAssertNil(standardOutput)
+            XCTAssertNil(standardError)
+            XCTAssert(exitStatus == 0)
+            moveExpectation.fulfill()
+        }
+        waitForExpectations(timeout: defaultTimeout, handler: nil)
+
+        // Confirm it exists in the new location
+        exists = FileManager.default.fileExists(atPath: destinationFilePath, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(!isDir.boolValue)
+
+        // Confirm it also exists in the original location
+        exists = FileManager.default.fileExists(atPath: filePath, isDirectory: &isDir)
+        XCTAssertTrue(exists)
+        XCTAssertTrue(!isDir.boolValue)
+
+        // # Clean Up
+
+        // Remove the directory from the destination
+        try! removeTemporaryItem(atPath: destinationDirectoryPath)
+        try! removeTemporaryItem(atPath: directoryPath)
     }
 
 }
