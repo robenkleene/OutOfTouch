@@ -113,7 +113,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
         XCTAssertEqual(contents, testContents)
 
-        // Clean Up
+        // # Clean Up
 
         // Remove the file
         let removeExpectation = expectation(description: "Remove file")
@@ -131,6 +131,9 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testContentsExistingFile() {
+
+        // # Setup
+
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
 
         // Create a file
@@ -149,6 +152,8 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         XCTAssertTrue(exists)
         XCTAssertTrue(!isDir.boolValue)
 
+        // # Test
+
         // Write to the file
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
@@ -166,7 +171,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
         XCTAssertEqual(contents, testContents)
 
-        // Clean Up
+        // # Clean Up
 
         // Remove the file
         let removeExpectation = expectation(description: "Remove file")
@@ -205,6 +210,8 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testMove() {
+        // # Setup
+
         // Create a directory
         let directoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryName)
         try! FileManager.default.createDirectory(atPath: directoryPath,
@@ -222,6 +229,8 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         var exists = FileManager.default.fileExists(atPath: filePath, isDirectory: &isDir)
         XCTAssertTrue(exists)
         XCTAssertTrue(!isDir.boolValue)
+
+        // # Test
 
         // Move the directory
         let destinationDirectoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryNameTwo)
@@ -246,7 +255,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         exists = FileManager.default.fileExists(atPath: directoryPath, isDirectory: &isDir)
         XCTAssertFalse(exists)
 
-        // Clean Up
+        // # Clean Up
 
         // Remove the directory from the destination
         try! removeTemporaryItem(atPath: destinationDirectoryPath)
