@@ -229,15 +229,19 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Create a directory
         let directoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryName)
-        try! FileManager.default.createDirectory(atPath: directoryPath,
-                                                 withIntermediateDirectories: true,
-                                                 attributes: nil)
         let filePath = directoryPath.appendingPathComponent(testFilename)
 
-        // Create a file
-        try! testContents.write(toFile: filePath,
-                                atomically: true,
-                                encoding: String.Encoding.utf8)
+        do {
+            try FileManager.default.createDirectory(atPath: directoryPath,
+                                                     withIntermediateDirectories: true,
+                                                     attributes: nil)
+            // Create a file
+            try testContents.write(toFile: filePath,
+                                    atomically: true,
+                                    encoding: String.Encoding.utf8)
+        } catch {
+            XCTFail()
+        }
 
         // Confirm it exists
         var isDir: ObjCBool = false
