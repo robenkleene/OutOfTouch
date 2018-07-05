@@ -6,13 +6,12 @@
 //  Copyright © 2017 Roben Kleene. All rights reserved.
 //
 
+import OutOfTouch
+import StringPlusPath
 import XCTest
 import XCTestTemp
-import StringPlusPath
-import OutOfTouch
 
 class OutOfTouchTests: TemporaryDirectoryTestCase {
-
     let defaultTimeout = 20.0
     let testFilename = "Test File"
     let testDirectoryName = "Test Directory"
@@ -93,8 +92,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // Write to file
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
-                               contents: testContents)
-        { standardOutput, standardError, exitStatus in
+                               contents: testContents) { standardOutput, standardError, exitStatus in
             XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
@@ -131,7 +129,6 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testContentsExistingFile() {
-
         // # Setup
 
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
@@ -157,8 +154,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // Write to the file
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
-                               contents: testContents)
-        { standardOutput, standardError, exitStatus in
+                               contents: testContents) { standardOutput, standardError, exitStatus in
             XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
@@ -198,11 +194,13 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // Write to file
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path, contents: testContents) { standardOutput, standardError, exitStatus in
+            // These two asserts sometimes fail:
+            // `XCTAssertNotNil(standardError)`
+            // `XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents`
+            // It's not clear it's defined in which order the process handler
+            // blocks for processing `stdout` and exit are called.
             XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
-            // This sometimes fails due to timing issues, it's not clear it's
-            // defined in which order the process handler blocks for processing
-            // `stdout` and exit are called.
-            // XCTAssertNotNil(standardError)
+            XCTAssertNotNil(standardError)
             XCTAssertTrue(exitStatus > 0)
             writeExpectation.fulfill()
         }
@@ -237,8 +235,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let destinationFilePath = destinationDirectoryPath.appendingPathComponent(testFilename)
         let moveExpectation = expectation(description: "Move")
         OutOfTouch.moveItem(atPath: directoryPath,
-                            toPath: destinationDirectoryPath)
-        { standardOutput, standardError, exitStatus in
+                            toPath: destinationDirectoryPath) { standardOutput, standardError, exitStatus in
             XCTAssertNil(standardOutput)
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
@@ -289,8 +286,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let destinationFilePath = destinationDirectoryPath.appendingPathComponent(testFilename)
         let moveExpectation = expectation(description: "Move")
         OutOfTouch.copyDirectory(atPath: directoryPath,
-                                 toPath: destinationDirectoryPath)
-        { standardOutput, standardError, exitStatus in
+                                 toPath: destinationDirectoryPath) { standardOutput, standardError, exitStatus in
             XCTAssertNil(standardOutput)
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
@@ -314,5 +310,4 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         try! removeTemporaryItem(atPath: destinationDirectoryPath)
         try! removeTemporaryItem(atPath: directoryPath)
     }
-
 }
