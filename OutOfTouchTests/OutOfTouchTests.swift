@@ -204,7 +204,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Write to file
         let writeExpectation = expectation(description: "Write to file")
-        OutOfTouch.writeToFile(atPath: path, contents: testContents) { standardOutput, standardError, exitStatus in
+        OutOfTouch.writeToFile(atPath: path, contents: testContents) { _, _, exitStatus in
             // These two asserts sometimes fail:
             // `XCTAssertNotNil(standardError)`
             // `XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents`
