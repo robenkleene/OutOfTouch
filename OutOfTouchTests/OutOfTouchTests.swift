@@ -214,9 +214,6 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 //                           self.testContents,
 //                           "`writeToFile` also writes the contents to `standardOutput`")
 //            XCTAssertNotNil(standardError)
-            // Replace the two asserts which sometimes fail with the below one
-            // which always succeeds.
-            XCTAssertTrue(standardError == nil || String(standardOutput!.dropLast()) == self.testContents)
             XCTAssertTrue(exitStatus > 0)
             writeExpectation.fulfill()
         }
