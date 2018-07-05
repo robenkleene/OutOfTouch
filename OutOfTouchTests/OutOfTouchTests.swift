@@ -172,11 +172,15 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
 
-        // Read the contents
-        let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
-        // Remove the new line noise that comes from reading and writing the file
-        let contents = String(rawContents.dropLast())
-        XCTAssertEqual(contents, testContents)
+        do {
+            // Read the contents
+            let rawContents = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
+            // Remove the new line noise that comes from reading and writing the file
+            let contents = String(rawContents.dropLast())
+            XCTAssertEqual(contents, testContents)
+        } catch {
+            XCTFail()
+        }
 
         // # Clean Up
 
