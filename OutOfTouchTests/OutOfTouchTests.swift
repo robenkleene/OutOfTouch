@@ -334,7 +334,11 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // # Clean Up
 
         // Remove the directory from the destination
-        try! removeTemporaryItem(atPath: destinationDirectoryPath)
-        try! removeTemporaryItem(atPath: directoryPath)
+        do {
+            try removeTemporaryItem(atPath: destinationDirectoryPath)
+            try removeTemporaryItem(atPath: directoryPath)
+        } catch {
+            XCTFail()
+        }
     }
 }
