@@ -276,7 +276,11 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // # Clean Up
 
         // Remove the directory from the destination
-        try! removeTemporaryItem(atPath: destinationDirectoryPath)
+        do {
+            try removeTemporaryItem(atPath: destinationDirectoryPath)
+        } catch {
+            XCTFail()
+        }
     }
 
     func testCopy() {
