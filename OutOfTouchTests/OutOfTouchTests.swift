@@ -232,12 +232,12 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let filePath = directoryPath.appendingPathComponent(testFilename)
         do {
             try FileManager.default.createDirectory(atPath: directoryPath,
-                                                     withIntermediateDirectories: true,
-                                                     attributes: nil)
+                                                    withIntermediateDirectories: true,
+                                                    attributes: nil)
             // Create a file
             try testContents.write(toFile: filePath,
-                                    atomically: true,
-                                    encoding: String.Encoding.utf8)
+                                   atomically: true,
+                                   encoding: String.Encoding.utf8)
         } catch {
             XCTFail()
         }
@@ -290,12 +290,12 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let filePath = directoryPath.appendingPathComponent(testFilename)
         do {
             try FileManager.default.createDirectory(atPath: directoryPath,
-                                                     withIntermediateDirectories: true,
-                                                     attributes: nil)
+                                                    withIntermediateDirectories: true,
+                                                    attributes: nil)
             // Create a file
             try testContents.write(toFile: filePath,
-                                    atomically: true,
-                                    encoding: String.Encoding.utf8)
+                                   atomically: true,
+                                   encoding: String.Encoding.utf8)
         } catch {
             XCTFail()
         }
