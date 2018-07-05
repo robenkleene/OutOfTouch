@@ -93,7 +93,9 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
                                contents: testContents) { standardOutput, standardError, exitStatus in
-            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+            XCTAssertEqual(String(standardOutput!.dropLast()),
+                           self.testContents,
+                           "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
             writeExpectation.fulfill()
@@ -108,7 +110,8 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Read the contents
         let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
-        let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
+        // Remove the new line noise that comes from reading and writing the file
+        let contents = String(rawContents.dropLast())
         XCTAssertEqual(contents, testContents)
 
         // # Clean Up
@@ -155,7 +158,9 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
                                contents: testContents) { standardOutput, standardError, exitStatus in
-            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+            XCTAssertEqual(String(standardOutput!.dropLast()),
+                           self.testContents,
+                           "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
             writeExpectation.fulfill()
@@ -164,7 +169,8 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Read the contents
         let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
-        let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
+        // Remove the new line noise that comes from reading and writing the file
+        let contents = String(rawContents.dropLast())
         XCTAssertEqual(contents, testContents)
 
         // # Clean Up
@@ -199,7 +205,9 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
             // `XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents`
             // It's not clear it's defined in which order the process handler
             // blocks for processing `stdout` and exit are called.
-            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+            XCTAssertEqual(String(standardOutput!.dropLast()),
+                           self.testContents,
+                           "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNotNil(standardError)
             XCTAssertTrue(exitStatus > 0)
             writeExpectation.fulfill()
