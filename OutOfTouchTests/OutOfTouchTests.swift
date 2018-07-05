@@ -6,13 +6,12 @@
 //  Copyright © 2017 Roben Kleene. All rights reserved.
 //
 
+import OutOfTouch
+import StringPlusPath
 import XCTest
 import XCTestTemp
-import StringPlusPath
-import OutOfTouch
 
 class OutOfTouchTests: TemporaryDirectoryTestCase {
-
     let defaultTimeout = 20.0
     let testFilename = "Test File"
     let testDirectoryName = "Test Directory"
@@ -93,9 +92,10 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // Write to file
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
-                               contents: testContents)
-        { standardOutput, standardError, exitStatus in
-            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+                               contents: testContents) { standardOutput, standardError, exitStatus in
+            XCTAssertEqual(String(standardOutput!.dropLast()),
+                           self.testContents,
+                           "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
             writeExpectation.fulfill()
@@ -108,10 +108,16 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         XCTAssertTrue(exists)
         XCTAssertTrue(!isDir.boolValue)
 
-        // Read the contents
-        let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
-        let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
-        XCTAssertEqual(contents, testContents)
+        do {
+            // Read the contents
+            // Test remove the second file with NSFileManager
+            let rawContents = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
+            // Remove the new line noise that comes from reading and writing the file
+            let contents = String(rawContents.dropLast())
+            XCTAssertEqual(contents, testContents)
+        } catch {
+            XCTFail()
+        }
 
         // # Clean Up
 
@@ -131,7 +137,6 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
     }
 
     func testContentsExistingFile() {
-
         // # Setup
 
         let path = temporaryDirectoryPath.appendingPathComponent(testFilename)
@@ -157,19 +162,25 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // Write to the file
         let writeExpectation = expectation(description: "Write to file")
         OutOfTouch.writeToFile(atPath: path,
-                               contents: testContents)
-        { standardOutput, standardError, exitStatus in
-            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
+                               contents: testContents) { standardOutput, standardError, exitStatus in
+            XCTAssertEqual(String(standardOutput!.dropLast()),
+                           self.testContents,
+                           "`writeToFile` also writes the contents to `standardOutput`")
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
             writeExpectation.fulfill()
         }
         waitForExpectations(timeout: defaultTimeout, handler: nil)
 
-        // Read the contents
-        let rawContents = try! String(contentsOfFile: path, encoding: String.Encoding.utf8)
-        let contents = String(rawContents.dropLast()) // Remove the new line noise that comes from reading and writing the file
-        XCTAssertEqual(contents, testContents)
+        do {
+            // Read the contents
+            let rawContents = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
+            // Remove the new line noise that comes from reading and writing the file
+            let contents = String(rawContents.dropLast())
+            XCTAssertEqual(contents, testContents)
+        } catch {
+            XCTFail()
+        }
 
         // # Clean Up
 
@@ -197,12 +208,16 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Write to file
         let writeExpectation = expectation(description: "Write to file")
-        OutOfTouch.writeToFile(atPath: path, contents: testContents) { standardOutput, standardError, exitStatus in
-            XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents, "`writeToFile` also writes the contents to `standardOutput`")
-            // This sometimes fails due to timing issues, it's not clear it's
-            // defined in which order the process handler blocks for processing
-            // `stdout` and exit are called.
-            // XCTAssertNotNil(standardError)
+        OutOfTouch.writeToFile(atPath: path, contents: testContents) { _, _, exitStatus in
+            // These two asserts sometimes fail:
+            // `XCTAssertNotNil(standardError)`
+            // `XCTAssertEqual(String(standardOutput!.dropLast()), self.testContents`
+            // It's not clear it's defined in which order the process handler
+            // blocks for processing `stdout` and exit are called.
+//            XCTAssertEqual(String(standardOutput!.dropLast()),
+//                           self.testContents,
+//                           "`writeToFile` also writes the contents to `standardOutput`")
+//            XCTAssertNotNil(standardError)
             XCTAssertTrue(exitStatus > 0)
             writeExpectation.fulfill()
         }
@@ -214,15 +229,18 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Create a directory
         let directoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryName)
-        try! FileManager.default.createDirectory(atPath: directoryPath,
-                                                 withIntermediateDirectories: true,
-                                                 attributes: nil)
         let filePath = directoryPath.appendingPathComponent(testFilename)
-
-        // Create a file
-        try! testContents.write(toFile: filePath,
-                                atomically: true,
-                                encoding: String.Encoding.utf8)
+        do {
+            try FileManager.default.createDirectory(atPath: directoryPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: nil)
+            // Create a file
+            try testContents.write(toFile: filePath,
+                                   atomically: true,
+                                   encoding: String.Encoding.utf8)
+        } catch {
+            XCTFail()
+        }
 
         // Confirm it exists
         var isDir: ObjCBool = false
@@ -237,8 +255,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let destinationFilePath = destinationDirectoryPath.appendingPathComponent(testFilename)
         let moveExpectation = expectation(description: "Move")
         OutOfTouch.moveItem(atPath: directoryPath,
-                            toPath: destinationDirectoryPath)
-        { standardOutput, standardError, exitStatus in
+                            toPath: destinationDirectoryPath) { standardOutput, standardError, exitStatus in
             XCTAssertNil(standardOutput)
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
@@ -258,7 +275,11 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // # Clean Up
 
         // Remove the directory from the destination
-        try! removeTemporaryItem(atPath: destinationDirectoryPath)
+        do {
+            try removeTemporaryItem(atPath: destinationDirectoryPath)
+        } catch {
+            XCTFail()
+        }
     }
 
     func testCopy() {
@@ -266,15 +287,18 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
 
         // Create a directory
         let directoryPath = temporaryDirectoryPath.appendingPathComponent(testDirectoryName)
-        try! FileManager.default.createDirectory(atPath: directoryPath,
-                                                 withIntermediateDirectories: true,
-                                                 attributes: nil)
         let filePath = directoryPath.appendingPathComponent(testFilename)
-
-        // Create a file
-        try! testContents.write(toFile: filePath,
-                                atomically: true,
-                                encoding: String.Encoding.utf8)
+        do {
+            try FileManager.default.createDirectory(atPath: directoryPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: nil)
+            // Create a file
+            try testContents.write(toFile: filePath,
+                                   atomically: true,
+                                   encoding: String.Encoding.utf8)
+        } catch {
+            XCTFail()
+        }
 
         // Confirm it exists
         var isDir: ObjCBool = false
@@ -289,8 +313,7 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         let destinationFilePath = destinationDirectoryPath.appendingPathComponent(testFilename)
         let moveExpectation = expectation(description: "Move")
         OutOfTouch.copyDirectory(atPath: directoryPath,
-                                 toPath: destinationDirectoryPath)
-        { standardOutput, standardError, exitStatus in
+                                 toPath: destinationDirectoryPath) { standardOutput, standardError, exitStatus in
             XCTAssertNil(standardOutput)
             XCTAssertNil(standardError)
             XCTAssert(exitStatus == 0)
@@ -311,8 +334,11 @@ class OutOfTouchTests: TemporaryDirectoryTestCase {
         // # Clean Up
 
         // Remove the directory from the destination
-        try! removeTemporaryItem(atPath: destinationDirectoryPath)
-        try! removeTemporaryItem(atPath: directoryPath)
+        do {
+            try removeTemporaryItem(atPath: destinationDirectoryPath)
+            try removeTemporaryItem(atPath: directoryPath)
+        } catch {
+            XCTFail()
+        }
     }
-
 }

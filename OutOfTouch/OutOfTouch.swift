@@ -9,7 +9,6 @@
 import Cocoa
 
 public class OutOfTouch {
-
     public typealias OutOfTouchHandler = (String?, String?, Int32) -> Void
 
     // MARK: Create File
@@ -56,8 +55,7 @@ public class OutOfTouch {
 
     public class func copyDirectory(atPath path: String,
                                     toPath destinationPath: String,
-                                    handler: OutOfTouchHandler?)
-    {
+                                    handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         confirmSafe(path: destinationPath)
         if path.hasSuffix("/") {
@@ -75,13 +73,12 @@ public class OutOfTouch {
         task.arguments = ["-R", path, destinationPath]
         run(task, handler: handler)
     }
-    
+
     // MARK: Move Item
 
     public class func moveItem(atPath path: String,
                                toPath destinationPath: String,
-                               handler: OutOfTouchHandler?)
-    {
+                               handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         confirmSafe(path: destinationPath)
         let task = Process()
@@ -94,8 +91,7 @@ public class OutOfTouch {
 
     public class func writeToFile(atPath path: String,
                                   contents: String,
-                                  handler: OutOfTouchHandler?)
-    {
+                                  handler: OutOfTouchHandler?) {
         confirmSafe(path: path)
         let echoTask = Process()
         echoTask.launchPath = "/bin/echo"
@@ -135,8 +131,7 @@ public class OutOfTouch {
                 if
                     let output = String(data: data,
                                         encoding: String.Encoding.utf8),
-                    output.count > 0
-                {
+                    output.count > 0 {
                     if standardOutput == nil {
                         standardOutput = ""
                     }
@@ -152,15 +147,13 @@ public class OutOfTouch {
                 if
                     let output = String(data: file.availableData,
                                         encoding: String.Encoding.utf8),
-                    output.count > 0
-                {
+                    output.count > 0 {
                     if standardError == nil {
                         standardError = ""
                     }
                     standardError? += output
                 }
             }
-
         }
         task.standardError = standardErrorPipe
 
@@ -171,8 +164,7 @@ public class OutOfTouch {
                 standardErrorPipe.fileHandleForReading.readabilityHandler = nil
             }
         }
-        
+
         task.launch()
     }
-
 }
