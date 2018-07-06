@@ -1,4 +1,4 @@
-# `OutOfTouch`
+# `OutOfTouch` [![Build Status](https://travis-ci.org/robenkleene/OutOfTouch.svg?branch=master)](https://travis-ci.org/robenkleene/OutOfTouch)
 
 `OutOfTouch` is a Cocoa framework for creating a separate process that modifies the file system. 
 
