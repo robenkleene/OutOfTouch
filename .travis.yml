@@ -1,3 +1,26 @@
 language: swift
 osx_image: xcode10
 script: make ci
+xcode_project: OutOfTouch
+xcode_scheme: OutOfTouch
+env:
+  global:
+  - FRAMEWORK_NAME=OutOfTouch
+before_install:
+- brew update
+- brew outdated carthage || brew upgrade carthage
+before_script:
+- make lint
+- carthage bootstrap
+before_deploy:
+- carthage build --no-skip-current
+- carthage archive $FRAMEWORK_NAME
+deploy:
+  provider: releases
+  api_key:
+    secure: PbchDRS0FDhIKGaHlZsM7Tgkr6zk1/dnkqdDCwr+O55+iib7AfoePtUgCkmJaj9fcK7skdYmQ2z6/gjomj6jE915opJMIAtHm7fMxUGn6W7OtTn4J8Fp1stdWYxkC/dp+p07MYjS24Atm6VA83zPEFn04XrhZDC48MhdOJkVzCmqnpplYqDgYIU/+cWinxKC5Vr2EpSdyGThvDryGW+9dpUichSe39YSMgRn2db5sEUOyvMS/SfmkvMD4ik6+TvVWMwprIgJN6kZiHdo00Z+7UjqnK4qdUelebHcxAuo94pL6a+yg5Y1HREXJfM5gAMu8VplmVstZ3iH+llxn+E4vVO7AONvUGqiZpGV8PBnUq7NuIeohDs+Jd04u6oChs88dZ0vC8i9M8awzD5ASodvQVmE7sQ/D5U8XTl0PkVaHj+XiQlOnAPxQSu+EYSGEzALk4MnM5o4S3j24UitgtAtLrotqErwbgP2oRvPJrRS+QNqcH+1h7KZvc8Kpph3yUCALUtMBDlJRIzuScqJq8bsIzAgqtTAWTQ65Y7DnT+dlQ9UM+c7tJIhpEI1MXSy9VJZXtMHE97GJgee6YLexbiG1m9IiPpcyjuedO5LXpd80QObORc0fsnJfSI35xEyHVTRbgd/6IoajgbcD2sFsmGOiS1d8Cc3Ewo8IpU9saShrfQ=
+  file: OutOfTouch.framework.zip
+  skip_cleanup: true
+  on:
+    repo: robenkleene/OutOfTouch
+    tags: true
