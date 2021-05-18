@@ -1,8 +1,8 @@
 SCHEME = OutOfTouch
 
-.PHONY: build test lint autocorrect swiftformat swiftlint_autocorrect bootstrap
+.PHONY: build test lint autocorrect swiftformat swiftlint_autocorrect bootstrap archive
 
-ci: build
+ci: bootstrap build
 ac: autocorrect
 autocorrect: swiftformat swiftlint_autocorrect
 
@@ -19,6 +19,10 @@ build:
 	xcodebuild build \
 		-alltargets \
 		-configuration Debug
+
+archive:
+	carthage build --no-skip-current
+	carthage archive OutOfTouch
 
 bootstrap:
 	carthage bootstrap
